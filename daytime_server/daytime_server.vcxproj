@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{15546f95-d601-48da-90ae-b9b24b52138f}</ProjectGuid>
-    <RootNamespace>daytimeclient</RootNamespace>
+    <ProjectGuid>{afacc736-3ef0-4d8e-bbb5-613faa335252}</ProjectGuid>
+    <RootNamespace>daytimeserver</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
