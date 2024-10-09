@@ -1,18 +1,9 @@
 ﻿#pragma once
 #include <memory>
 #include <boost/asio.hpp>
+#include "../includes/common.hpp"
 using boost::asio::ip::tcp;
 
-inline std::string makeDaytimeString()
-{
-    time_t now = time(nullptr);
-    std::array<char, 26> buf;
-    if (auto err = ctime_s(buf.data(), buf.size(), &now); err != 0)
-    {
-        return "Error";
-    }
-    return std::string(buf.data());
-}
 
 class TcpConnection
     : public std::enable_shared_from_this<TcpConnection>

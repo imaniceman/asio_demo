@@ -1,36 +1,67 @@
-﻿#include <boost/asio.hpp>
-#include<iostream>
+﻿#include<iostream>
+#include <boost/asio.hpp>
+#include "../includes/common.hpp"
 
 using boost::asio::ip::udp;
 
-inline std::string makeDaytimeString()
+
+class UdpServer
 {
-    const time_t now = time(nullptr);
-    std::array<char, 26> buf;
-    if (const auto err = ctime_s(buf.data(), buf.size(), &now); err != 0)
+public :
+    explicit UdpServer(boost::asio::io_context& ioContext)
+        : m_ioContext(ioContext),
+          m_socket(ioContext, udp::endpoint(udp::v4(), 13))
     {
-        return "Error";
+        startReceive();
     }
-    return {buf.data()};
-}
+
+    ~UdpServer()
+    {
+        std::cout << "~UdpServer\n";
+    }
+
+private:
+    boost::asio::io_context& m_ioContext;
+    udp::socket m_socket;
+    udp::endpoint m_remoteEndpoint;
+    std::array<char, 1> m_receiveBuf;
+
+    void startReceive()
+    {
+        // m_socket.receive_from(boost::asio::buffer(receiveBuf), remoteEndpoint);
+        // 改成异步
+        m_socket.async_receive_from(boost::asio::buffer(m_receiveBuf),
+                                    m_remoteEndpoint,
+                                    [this](const boost::system::error_code& error, std::size_t bytesTransferred)
+                                    {
+                                        handleReceive(error, bytesTransferred);
+                                    }
+        );
+    }
+
+
+    void handleReceive(const boost::system::error_code& error, std::size_t /*bytesTransferred*/)
+    {
+        if (!error)
+        {
+            auto message = std::make_shared<std::string>(makeDaytimeString());
+            m_socket.async_send_to(boost::asio::buffer(*message), m_remoteEndpoint,
+                                   [this,message](boost::system::error_code, size_t)
+                                   {
+                                   });
+            startReceive();
+        }
+    }
+};
+
 
 int main(int argc, char* argv[])
 {
     try
     {
         boost::asio::io_context ioContext;
-        udp::socket socket(ioContext, udp::endpoint(udp::v4(), 13));
-        for (;;)
-        {
-            std::array<char, 1> receiveBuf;
-            udp::endpoint remoteEndpoint;
-            socket.receive_from(boost::asio::buffer(receiveBuf), remoteEndpoint);
-            std::string message = makeDaytimeString();
-            boost::system::error_code ignoredError;
-            socket.send_to(boost::asio::buffer(message),
-                           remoteEndpoint, 0, ignoredError);
-
-        }
+        UdpServer server(ioContext);
+        ioContext.run();
     }
     catch (std::exception& e)
     {
