@@ -24,6 +24,7 @@
     <ProjectGuid>{c7223b16-f5ef-4721-bc7a-ac464b65f09e}</ProjectGuid>
     <RootNamespace>udpdaytimeserver</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>daytime_server</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
