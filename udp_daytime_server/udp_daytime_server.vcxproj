@@ -132,6 +132,9 @@
   <ItemGroup>
     <ClCompile Include="server.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\includes\udp_server.hpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
