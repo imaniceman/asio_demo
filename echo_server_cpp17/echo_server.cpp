@@ -44,7 +44,8 @@ int main()
         {
             ioContext.stop();
         });
-    // boost::asio::co_spawn(ioContext,)
+        co_spawn(ioContext, listener(), detached);
+        ioContext.run();
     }
     catch (const std::exception& e)
     {
